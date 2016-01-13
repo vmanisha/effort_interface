@@ -14,6 +14,7 @@ app.set('views', __dirname + '/../views');
 app.use(bodyParser.json());
 app.use("/", express.static(__dirname + '/../views'));
 app.use("/js", express.static(__dirname + '/../views/js'));
+app.use("/css", express.static(__dirname + '/../views/css'));
 
 app.get('/index', function(req, res) {
   res.type('text/html'); // set content-type

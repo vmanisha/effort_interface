@@ -4,13 +4,13 @@
 <title> 
   Query-Document Pair labelling
 </title>
-    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<link href="./css/style.css" rel="stylesheet" type="text/css">
+	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="./js/jquery.validate.js"></script>
-    <script src="./js/api.js"></script>
     <script type="text/javascript" src="./js/rangy-core.js"></script>
     <script type="text/javascript" src="./js/rangy-classapplier.js"></script>
-    <script type="text/javascript" src="./js/currentrelease/rangy-highlighter.js"></script>
-	 <link href="style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="./js/rangy-highlighter.js"></script>
+    <script src="./js/api.js"></script>
 </head>
 <body>
 
@@ -47,9 +47,9 @@
     	</ul>		 
     
     	The above parameters are also explained in detail under '<b><i>Instructions</i></b>' on 
-    	each page. Please click on '<b><i>Instructions</i></b>' to view them, in case you forget. 
-	For each page please highlight the paragraphs relevant to the query using the '<b><i>Highlight</i></b> button 
-	on the top right. 
+    	each page. Please click on '<b><i>Instructions</i></b>' to view them, in case you forget. <br/> 
+		For each page please mark paragraphs relevant to the query using the '<b><i>Important</i></b> button 
+		on the top. To view the portions you marked important, you can click view button below it 
 		Please <b>enable javascript</b> on your browser to complete this HIT. Please do not refresh the 
 		page or press back. Contact the Requester if something is not clear.
     	<br/>
@@ -149,12 +149,23 @@
 	that made it difficult to understand it.  
 	Where ever possible please provide factors that affected your understanding. </li>
   </ul>		 
-	For each page please highlight paragraphs that are relevant to the query.<br/>
-	To highlight, select the text using your mouse and click on '<b><i>Highlight</i></b>' button on the top right. 
+	For each page please mark paragraphs that are relevant to the query.<br/>
+	To mark, select the text using your mouse and click on '<b><i>Important</i></b>' 
+	button on the top. 
+	To view the portions you marked important, you can click view button below it 
   </div>
- <button id='highlight_button'>
-	<b> Highlight </b>
-</button>
+ 
+ <button id='important_button'  >
+	<b> Important </b>
+ </button>
+	<div id = 'important_div'>
+	</div>
+
+ <button id='view_important_button'>
+	<b> View </b>
+ </button>
+
+
 <div id='labels_page'>
 
   <input id='query_document_id' class='text' type='hidden'> </input>
@@ -227,7 +238,7 @@
   			<td valign="center"><input name="relevance" type="radio" value="high-rel" /><span class="answertext">Highly Relevant</span></td>
   		</tr>
   		<tr>
-  			<td valign="center"><input name="relevance" type="radio" value="high-rel" /><span class="answertext">Url is broken (Page not found or some error)</span></td>
+  			<td valign="center"><input name="relevance" type="radio" value="broken-url" /><span class="answertext">Url is broken (Page not found or some error)</span></td>
   		</tr>
   	</tbody>
   </table>
@@ -315,7 +326,7 @@
   
   <table border="0" cellpadding="0" cellspacing="4">
   	<tbody>
-  		<b>8. Did it take you a lot of <i>time to find</i> useful information in the document?</b>
+  		<b>8. Did it take you a lot of <i><u>time to find</u></i> useful information in the document?</b>
   		<tr>
   			<td valign="center"><input name="find_time" type="radio" value="no" /><span class="answertext">No </span></td>
   		</tr>
