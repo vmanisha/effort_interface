@@ -58,19 +58,19 @@ module.exports =
 							{
 								// Fix the qoutes problem.
 								qcount = split[7].match(/\"/g).length;
-								console.log("qoute count "+qcount+' '+qcount%2);
+								//console.log("qoute count "+qcount+' '+qcount%2);
 								// unhandled qoute, replace them all by
 								// &ldquo; 
 								if (qcount%2 == 1)
 								{
 									split[7] = split[7].replace(/"/g,"&ldquo;");
-									console.log(split[7].substring(1,100));
+									//console.log(split[7].substring(1,100));
 								}
 								key_data_dict[key].push([split[0],split[2],split[3],split[4],split[7]]);
 
 							}
 					else
-						console.log('Error in file '+key+' line '+i+ ' '+array[i] );
+						console.log('Error in file '+key+' line '+i+ ' '+array[i] +' '+split.length);
         			}
 				// Shuffle the entries.
 				key_data_dict[key] = shuffle(key_data_dict[key]);
