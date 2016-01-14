@@ -82,9 +82,9 @@ $(function(){
 
 	var contentFrame = document.getElementById('document_frame');
 	var rangySelection = rangy.getSelection(contentFrame);
-	alert('selected '+rangySelection);
+	//alert('selected '+rangySelection);
 	var content = $('#important_div').text();
-	alert(content);
+	//alert(content);
 	if (content.indexOf(rangySelection) == -1)
 		$('#important_div').append('<br/>'+rangySelection);
 	
@@ -208,7 +208,7 @@ $(function(){
 			{
 				var dict ={};
 				dict['important_text'] = important_text;
-				alert(important_text);
+				//alert(important_text);
 				radio_list.push(dict);
 			}
 			
@@ -390,6 +390,9 @@ function GetNextPair(worker_id, key) {
 			$('#instructions_page').hide();
 			$('#labels_page').hide();
 			$('#instructions').hide();
+			$('#important_button').hide();
+			$('#view_important_button').hide();
+			$('#important_div').hide();
 			$('#attributes_and_description').hide();
 			$('#code_page').show();
 			var code = output['code'];

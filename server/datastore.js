@@ -57,7 +57,7 @@ module.exports =
             				if(split.length == 8)
             	    				key_data_dict[key].push([split[0],split[2],split[3],split[4],split[7]]);
 					else
-						console.log('Error in file '+key+' line '+i );
+						console.log('Error in file '+key+' line '+i+ ' '+array[i] );
         			}
 				// Shuffle the entries.
 				key_data_dict[key] = shuffle(key_data_dict[key]);
@@ -116,7 +116,6 @@ module.exports =
 		event_database.flush();
 		response_database.flush();
 		var worker_key = worker_id+'\t'+key;
-		console.log('Key '+worker_key + ' '+key_data_dict[key].length );
 		// finished doing all the queries, return false.
 		if (key_data_dict[key].length == current_worker_key_query_index[worker_key])
 			return {'status':false};
@@ -125,6 +124,7 @@ module.exports =
 			var return_array = key_data_dict[key][current_worker_key_query_index[worker_key]];	
 			// increment the array index
 			current_worker_key_query_index[worker_key]++;
+			console.log('Key '+worker_key + ' '+key_data_dict[key].length +' '+return_array[0]+' '+return_array[1]);
 			return {'status':true, 'query_count':current_worker_key_query_index[worker_key], 'next_pair':return_array};
 		}
 	}
