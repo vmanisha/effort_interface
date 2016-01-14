@@ -53,9 +53,9 @@ module.exports =
         			for (var i in array)
         			{
             				var split = array[i].split('\t');
-					// format : queryid query-type, query, query-description, doc-id, doc-label, doc-content
-            				if(split.length == 7)
-            	    				key_data_dict[key].push([split[0],split[2],split[3],split[4],split[6]]);
+					// format : queryid query-type, query, query-description, doc-id, doc-label, doc_url doc-content
+            				if(split.length == 8)
+            	    				key_data_dict[key].push([split[0],split[2],split[3],split[4],split[7]]);
 					else
 						console.log('Error in file '+key+' line '+i );
         			}
