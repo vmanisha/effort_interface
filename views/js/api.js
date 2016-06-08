@@ -7,6 +7,10 @@ $(function(){
   var query_document_id = $('#query_document_id').val();
 
   var contentFrame;
+  var total_scrolls = 0.0;
+  var total_hovers = 0.0;
+  var cheat =0.0;
+
   // Adding Highlights.
   rangy.init();
   
@@ -211,27 +215,61 @@ $(function(){
 				//alert(important_text);
 				radio_list.push(dict);
 			}
-			
-			// Register the responses.
-			$.ajax({url:'api/submitQueryPairResponses',data: JSON.stringify({'worker_id':worker_id , 'key':key, 'query_document_id':query_document_id,'responses':radio_list }),
-    		    contentType: "application/json",
-    		    type:'post',
-    		    success : function(output){
-					$('#questions_form input:radio').removeAttr('checked');
-					$('#questions_form textarea').each(function () {
-						$(this).val('');
-					});
-    		        //get new query pair
-					GetNextPair(worker_id, key);				
-    		    },
-    		    error : function(output)
-    		    {
-					$('#questions_form_error').css("color","red");
-					$('#questions_form_error').css('text-decoration', 'bold');
-    		        $('#questions_form_error').html(output.responseText);
-    		    }
-
-   		    });
+		
+			// Check for scroll_count and hover_count.
+			if (total_scrolls > 0 && cheat < 3)
+			{	
+				// Register the responses.
+				$.ajax({url:'api/submitQueryPairResponses',
+					data: JSON.stringify({'worker_id':worker_id ,
+					 'key':key, 'query_document_id':query_document_id,
+					 'responses':radio_list }),
+    		    			contentType: "application/json",
+    		    			type:'post',
+    		    			success : function(output){
+						$('#questions_form input:radio').removeAttr('checked');
+						$('#questions_form textarea').each(function () {
+							$(this).val('');
+						});
+    		        			//get new query pair
+						GetNextPair(worker_id, key);			
+    		    			},
+    		    			error : function(output)
+    		    			{
+						$('#questions_form_error').css("color","red");
+						$('#questions_form_error').css('text-decoration', 'bold');
+    		        			$('#questions_form_error').html(output.responseText);
+    		    			}
+   		    		});
+    	        		total_scrolls = 0;
+			}
+			else if (cheat == 2)
+			{
+    	    			$('#instructions_page').hide();
+    	    			$('#labels_page').hide();
+    	    			$('#instructions').hide();
+    	    			$('#important_button').hide();
+    	    			$('#view_important_button').hide();
+    	    			$('#important_div').hide();
+    	    			$('#attributes_and_description').hide();
+    	    			$('#code_page').show();
+    	    			$('#code_div').html('You have cheated thrice! Sorry, but you would not'+
+				' allowed to annotate more documents. You shall not be payed for the remaining hits.');
+				
+			}
+			else
+			{
+				cheat+=1;	
+				$('#questions_form_error').css("color","red");
+				$('#questions_form_error').css('text-decoration', 'bold');
+    		        	$('#questions_form_error').html('You are cheating! Please read the document'+
+				' carefully before submitting answers. You will be given '+(3-cheat)+' more'+
+				' attempts.');
+				$('#questions_form input:radio').removeAttr('checked');
+				$('#questions_form textarea').each(function () {
+					$(this).val('');	
+				});
+			}
     		    return false;
 		}	
   }); 
@@ -323,6 +361,7 @@ $(function(){
 
   // Record the scroll event of iframe.
   var iScrollPos = 0;
+  
   $('#document_frame').load(function () {
 	var iframe = $('#document_frame').contents();
 
@@ -331,7 +370,29 @@ $(function(){
             event.preventDefault();
         }); 
  
+	iframe.mousemove(function(event) {
+		total_hovers+=1.0;
+		var edict = {};
+		edict['hover'] = event.type+' '+event.pageX + ' '+ event.pageY + ' '+ event.target.text;
+		var query_doc_id = $('#query_document_id').val().trim();
+		$.ajax({url:'api/submitEventForQueryPair',
+			data: JSON.stringify({'worker_id':worker_id , 'key':key,'query_document_id':query_doc_id, 'responses':[edict] }),
+			contentType: "application/json",
+			type:'post',
+			success : function(output){
+			},
+			error : function(output)
+			{
+			    	$('#questions_form_error').css("color","red");
+			    	$('#questions_form_error').css('text-decoration', 'bold');
+					$('#questions_form_error').html(output.responseText);
+			}
+		});
+
+	});
+
 	iframe.scroll(function() {
+		total_scrolls+=1.0;
 		var iCurScrollPos = iframe.scrollTop();
 		var scrollType='';
 		if (iCurScrollPos > iScrollPos) {
@@ -366,39 +427,41 @@ $(function(){
 function GetNextPair(worker_id, key) {
 
     $.ajax({url:'api/getNextPair',
-    data:JSON.stringify({'worker_id':worker_id, 'key':key}),
-    type:'post',
-    contentType: "application/json",
-    success : function(output){
-		
-        if('next_pair' in output)
-        {
-            $('#query').html(output['next_pair'][1]);
-            $('#query_description').html(output['next_pair'][2]);
-            $('#query_count').html('Query-Webpage pair #'+output['query_count']);
-  	    	var query_doc_id = output['next_pair'][0]+'\t'+output['next_pair'][3];
-	    	$('#query_document_id').val(query_doc_id);
-      	    iScrollPos = 0;
-            $('#document_frame').attr("srcdoc", output['next_pair'][4]);
-		    $('#instructions').focus();
-			$('#important_div').text('');
-			
-			
-	 }
-		if('code' in output)
-		{
-			$('#instructions_page').hide();
-			$('#labels_page').hide();
-			$('#instructions').hide();
-			$('#important_button').hide();
-			$('#view_important_button').hide();
-			$('#important_div').hide();
-			$('#attributes_and_description').hide();
-			$('#code_page').show();
-			var code = output['code'];
-			$('#code_div').html(code);
-		}
-    }
+    	data:JSON.stringify({'worker_id':worker_id, 'key':key}),
+    	type:'post',
+    	contentType: "application/json",
+    	success : function(output){
+    	    	
+    	    if('next_pair' in output)
+    	    {
+    	        $('#query').html(output['next_pair'][1]);
+    	        $('#query_description').html(output['next_pair'][2]);
+    	        $('#query_count').html('Query-Webpage pair #'+output['query_count']);
+    	        var query_doc_id = output['next_pair'][0]+'\t'+output['next_pair'][3];
+    	        $('#query_document_id').val(query_doc_id);
+    	  	iScrollPos = 0;
+    	        total_scrolls = 0;
+		total_hovers = 0;
+		$('#document_frame').attr("srcdoc", output['next_pair'][4]);
+    	    	$('#instructions').focus();
+    	    	$('#important_div').text('');
+    	    	$('#questions_form_error').html("");
+    	    		
+    	     }
+    	    	if('code' in output)
+    	    	{
+    	    		$('#instructions_page').hide();
+    	    		$('#labels_page').hide();
+    	    		$('#instructions').hide();
+    	    		$('#important_button').hide();
+    	    		$('#view_important_button').hide();
+    	    		$('#important_div').hide();
+    	    		$('#attributes_and_description').hide();
+    	    		$('#code_page').show();
+    	    		var code = output['code'];
+    	    		$('#code_div').html(code);
+    	    	}
+    	}
     });
 	return false;
 }

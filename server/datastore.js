@@ -7,6 +7,8 @@
 // a worker and hit batch key. 
 var fs = require('fs');
 var MicroDB = require('nodejs-microdb');
+var url = require('url');
+var cheerio = require('cheerio');
 
 worker_batchkey_dict = {};
 key_data_dict = {};
@@ -36,6 +38,51 @@ function shuffle(array) {
     return array;
 }
 
+// Function to replace all relative urls with docUrl 
+function ReplaceRelativeLinks(source, baseUrl) {
+
+	$ = cheerio.load(source);
+	// Replace all the relative links with absolute page.
+	$('[src]').each(function(i, ele) {
+		src = $(this).attr('src');
+		$(this).attr('src', FullUrl(src, baseUrl));
+	});
+	$('[srcset]').each(function(i, ele) {
+		src = $(this).attr('src');
+		$(this).attr('srcset', FullUrl(src, baseUrl));
+	});
+	
+	// Replace all the outlinks by modify url function 
+	$('a[href]').each(function(i, ele) {
+		href = $(this).attr('href');
+		// Check if there is no image.
+		$(this).attr('href', FullUrl(href, baseUrl));
+	});
+  
+	$('link[href]').each(function(i, ele) {
+	href = $(this).attr('href');
+	$(this).attr('href', FullUrl(href, baseUrl));
+	});
+
+	$('[background]').each(function(i,ele) {
+	href = $(this).attr('background');
+	$(this).attr('background', FullUrl(href, baseUrl));
+	});
+	
+	return $.html();	
+}
+
+function Relative(uri) {
+  return !url.parse(uri || '').host;
+}
+
+function FullUrl(uri, baseUrl) {
+ 
+  full_url =  (uri && Relative(uri)) ? url.resolve(baseUrl, uri) : uri;
+  return full_url; 
+}
+
+
 module.exports =
 {
 	// Given the key, load the key file -- query, description and html list. 
@@ -53,22 +100,19 @@ module.exports =
         			for (var i in array)
         			{
             				var split = array[i].split('\t');
-							// format : queryid query-type, query, query-description, doc-id, doc-label, doc_url doc-content
+					// format : queryid query-type, query, query-description, doc-id, doc-label, doc_url doc-content
             				if(split.length == 8)
-							{
-								// Fix the qoutes problem.
-								qcount = split[7].match(/\"/g).length;
-								//console.log("qoute count "+qcount+' '+qcount%2);
-								// unhandled qoute, replace them all by
-								// &ldquo; 
-								if (qcount%2 == 1)
-								{
-									split[7] = split[7].replace(/"/g,"&ldquo;");
-									//console.log(split[7].substring(1,100));
-								}
-								key_data_dict[key].push([split[0],split[2],split[3],split[4],split[7]]);
+					{
+						// Fix the qoutes problem.
+						qcount = split[7].match(/\"/g).length;
+						// unhandled qoute, replace them all by
+						// &ldquo; 
+						split[7] = ReplaceRelativeLinks(split[7], split[6]);
+						if (qcount%2 == 1)
+							split[7] = split[7].replace(/"/g,"&ldquo;");
+						key_data_dict[key].push([split[0],split[2],split[3],split[4],split[7]]);
 
-							}
+					}
 					else
 						console.log('Error in file '+key+' line '+i+ ' '+array[i] +' '+split.length);
         			}
@@ -79,7 +123,7 @@ module.exports =
 			}
 			catch(error) 
 			{
-				console.log('Attempt to load incorrect batch id '+ key);
+				console.log(error);
 				return false;
 			}
 		}

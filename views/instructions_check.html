@@ -1,0 +1,200 @@
+<html>
+
+<head>
+<title> 
+  Query-Document Pair labelling
+</title>
+    <link href="./css/style.css" rel="stylesheet" type="text/css">
+   <script type="text/javascript" src="./js/TextHighlighter.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="./js/jquery.validate.js"></script>
+    <script src="./js/api_3.js"></script>
+
+</head>
+<body>
+
+<div id = 'instructions_page'>
+  <center><b>Thank you for participating in this study. </b> </center>
+  <br/>
+  <br/>
+  <b>HIT Instructions </b>
+  <br/>
+  <div id= 'overview'>
+    	You will be shown a <i>search query and a web page</i>. 
+    	Assume that you were to issue the given query to a search engine (for example Google) 
+    	and were shown the corresponding webpage as search result, answer 5 questions 
+	regarding the page. These questions assess two aspects: Whether page was relevant for query and
+	whether you were able to find information in webpage to answer the query. 
+	You are also required to mark all portions of the page that are required to answer the query. 
+	These requirements are explained below:
+    	 <ul class='inst w3-card-4'>		
+    			<li> <b>Relevance: </b> The given webpage is relevant if it provides 
+    			information requested in the query. For example, if the query is 
+    			'president of USA' and the page is about 'Barak Obama', 
+    			it is considered relevant, on the other hand if the page is about 
+    			'Cotton candy', it is irrelevant.
+			</li>
+    			<li> <b>Findability: </b> We also ask you to mention how easy was it to <b>find the 
+    			information required</b> to answer the query from the webpage. We also ask you 
+    			about the time it took to find required information..</li>
+			<li>
+			<b>Highlights:</b> You should mark all the relevant parts of webpage. 
+			The <a href='./highlight_example.png' target='_black'>image</a> 
+			shows how to highlight parts of page. 
+			You shall only be <b>payed if you mark text that contains the answer </b>  
+			to the query. 
+			</li>
+    	</ul>
+		<br/>
+	There are some buttons on top of document for your convenience. They are explained below:
+	<ul class='inst w3-card-4'>
+    		<li><b> Instructions: </b> If you forget instructions, please click on '<b><i>Instructions</i></b>' button <img src='instructions.png' width = '85' height = '25'/>  to view them. </li>
+		<li> <b> View: </b> To view the text you highlighted, you can click '<b><i>View</i></b>' button.
+		<img src='view.png' width = '55' height = '25'/> 
+    	</ul>		 
+		<br/>
+		<b>Enable javascript</b> on your browser to complete this HIT. Do not refresh the 
+		page or press back. Contact the Requester if something is not clear. <br/>
+		<b>NOTE:</b> We track whether or not you read the document. If our system detects that you are cheating, 
+		you shall be disqualified and not payed for the hits. 
+    	<br/>
+    	<br/>
+    	<b>HIT Payment </b>
+    	<br/>
+    	This HIT consists of <span style="font-weight:bold;">10 query-webpage pairs</span>. 
+    	Please note that you will be payed 
+    	<span style="font-weight:bold;">ONLY </span>when you <span style="font-weight:bold;">
+    	COMPLETE QUESTIONS FOR ALL</span> query-webpage pairs. You may choose to skip a query 
+    	and webpage if you cannot answer any question. If too many query-webpage pairs are skipped, 
+    	you	may not be payed in full.  
+    
+  </div>
+  <br/>
+  <br/>
+  <b>HIT Terms And Conditions </b>
+  <br/>
+  <div id="consent">
+    By accepting this HIT, you confirm that you are willing to participate in this 
+	experiment, and that you agree that the data you provide by participating 
+	can be used in scientific publications (no identifying information will be used).
+    Sometimes it is necessary to share the data elicited from you
+    with other researchers for scientific purposes (for replication purposes). 
+	It will be shared if it is for non-commercial use. Identifying information will 
+	<span style="font-weight:bold;">never</span> be shared 
+	(your MTurk ID will be replaced with an arbitrary alphanumeric code).
+  </div>
+
+  <br/>
+  <form id = 'worker_id_and_key_form' method='POST'>
+	<center>
+  	<p><b>Worker Id: </b> <input id='worker_id_input' name="worker_id_input" size ='40' value="" /> (on your Mechanical Turk Dashboard) <br/></p>
+	<div id='worker_id_input_error'> </div>
+  	<p> <b>Batch Id: </b> <input id= 'key_input' name="key_input"  size ='40' value=""/> (in the HIT description) <br/> </p>
+	<div id='key_input_error'> </div>
+  	<br/>
+  	<table border="0" cellpadding="0" cellspacing="4">
+  		<tbody>
+  		<b>Please rate your expertise in reading and understanding English content</b>
+  			<tr>
+  				<td valign="center"><input name="proficiency" type="radio" value="non-prof" /><span class="answertext">Not proficient</span></td>
+  			</tr>
+  			<tr>
+  				<td valign="center"><input name="proficiency" type="radio" value="slight-prof" /><span class="answertext">Slightly Proficient</span></td>
+  			</tr>
+  			<tr>
+  				<td valign="center"><input name="proficiency" type="radio" value="prof" /><span class="answertext">Proficient </span></td>
+  			</tr>
+  			<tr>
+  				<td valign="center"><input name="proficiency" type="radio" value="highly-prof" /><span class="answertext">Highly Proficient</span></td>
+  			</tr>
+  			
+  	<br/>
+  		</tbody>
+  	</table>
+  	<br/>
+				 <div id='worker_id_and_key_form_error'> </div> 
+  	<br/>
+
+  	<input type= 'submit' value='Start HIT' class='submit'/> 
+  	</center>
+  </form>
+ <input id='worker_id' class ='text' type='hidden'></input>
+ <input id='key' class ='text' type='hidden'></input>
+
+</div>
+
+
+
+<div id='labels_page'>
+
+  <input id='query_document_id' class='text' type='hidden'> </input>
+  <div id='query_count' > </div>
+  <div id= 'query_and_document' >
+	<div class="w3-container w3-light-grey w3-border">
+	<p> <b> Suppose you submitted the following query to a search engine and the document below was shown as a result. </b></p>
+	<b> Query: </b>   <span id='query'> query </span>  <br/>
+	<b> Description: </b> <span id='query_description'>  description </span> <br/>
+	</div>
+  <button  class="w3-btn-floating w3-dropdown-hover" id = 'instructions'>
+  	<b>	Instructions </b>
+  </button>
+  <div class="w3-dropdown-content w3-card-4" id = 'attributes_and_description' style="width:550px">
+  	You are given a <i>search query and a web page</i>. Assume that you were to issue this 
+	query to a search engine (for example Google) and were shown the corresponding 
+	webpage as a search result, answer 5 questions about this page. 
+	These questions assess two aspects: Whether page was relevant for query and
+	whether you were able to find information in webpage to answer the query. 
+	You are also required to mark all portions of the page that are required to answer the query. 
+	These requirements are explained below:
+    	 <ul class='inst w3-card-4'>		
+    			<li> <b>Relevance: </b> The given webpage is relevant if it provides 
+    			information requested in the query. For example, if the query is 
+    			'president of USA' and the page is about 'Barak Obama', 
+    			it is considered relevant, on the other hand if the page is about 
+    			'Cotton candy', it is irrelevant.
+			</li>
+    			<li> <b>Findability: </b> We also ask you to mention how easy was it to <b>find the 
+    			information required</b> to answer the query from the webpage. We also ask you 
+    			about the time it took to find required information..</li>
+			<li>
+			<b>Highlights:</b> You should mark all the relevant parts of webpage. 
+			The <a href='./highlight_example.png' target='_black'>image</a> 
+			shows how to highlight parts of page. 
+			You shall only be <b>payed if you mark text that contains the answer to </b>  
+			the query. 
+			</li>
+    	</ul>
+  </div>
+ 
+	<div id = 'important_div' class="w3-dropdown-content w3-card-4" style="width:550px">
+	</div>
+
+ <button class="w3-btn-floating w3-dropdown-hover" id='view_important_button'>
+	<b> View </b>
+ </button>
+	<iframe align="middle" frameborder="1" height="650" id="document_frame" name="document_frame" scrolling="yes" src="" width="100%"></iframe>
+  </div>
+  
+  <form id='questions_form' method='POST' class="w3-container w3-light-grey w3-border">
+	<div id='questions_form_error'> </div>
+  
+	<div id='label_question_div' name='label_question_div'>
+  		<table border="0" cellpadding="0" cellspacing="4"  name ="label_question_table" id="label_question_table">
+  		</table>
+  		<div id='label_question_input_error'> </div>
+  
+	</div>	
+  	<input id="next_question" type= 'submit' value='Next Question' class="question_button"/> 
+  </form>
+</div>
+
+<div id='code_page'>
+	<center><b>Thank you for participating in this study. </b> </center>
+	<br/><br/>
+	<center>Please enter the following code in MTurk to get payed. </center>
+	<center><b>Code: </b> <div id='code_div'> </div> </center> 
+</div>
+
+</body>
+</html>
+

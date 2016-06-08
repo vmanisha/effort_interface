@@ -18,7 +18,7 @@ app.use("/css", express.static(__dirname + '/../views/css'));
 
 app.get('/index', function(req, res) {
   res.type('text/html'); // set content-type
-  res.render('instructions.html');
+  res.render('instructions_check.html');
 });
 
 
@@ -105,17 +105,14 @@ app.post('/api/submitQueryPairResponses', function(req, res){
 	// Submit the data of 10 questions/
 	var worker_id = req.body.worker_id;
 	var key = req.body.key;
-	var response_array = req.body.responses;
+	var response_dict = req.body.responses;
 	var query_document_id = req.body.query_document_id;
 	var time = new Date();
-	for(var i = 0; i < response_array.length;i++) 
+	for(var rkey in response_dict) 
 	{
-		for(var rkey in response_array[i])	
-		{	
-			time = new Date(time.getTime()+100);
-			//console.log('Response '+rkey +' '+response_array[i][rkey]+' '+time.getTime());
-			datastore.addResponseToDatabase(worker_id, key, query_document_id+'\t'+rkey, response_array[i][rkey], time.getTime());
-		}
+		time = new Date(time.getTime()+100);
+		//console.log('Response '+rkey +' '+response_array[i][rkey]+' '+time.getTime());
+		datastore.addResponseToDatabase(worker_id, key, query_document_id+'\t'+rkey, response_dict[rkey], time.getTime());
 	}
 	res.json(true);
 });
