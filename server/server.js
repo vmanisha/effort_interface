@@ -18,7 +18,7 @@ app.use("/css", express.static(__dirname + '/../views/css'));
 
 app.get('/index', function(req, res) {
   res.type('text/html'); // set content-type
-  res.render('instructions_check.html');
+  res.render('instructions.html');
 });
 
 

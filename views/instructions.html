@@ -4,19 +4,17 @@
 <title> 
   Query-Document Pair labelling
 </title>
-	<link href="./css/style.css" rel="stylesheet" type="text/css">
-	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <link href="./css/style.css" rel="stylesheet" type="text/css">
+   <script type="text/javascript" src="./js/TextHighlighter.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="./js/jquery.validate.js"></script>
     <script src="./js/api.js"></script>
-    <script type="text/javascript" src="./js/rangy-core.js"></script>
-    <script type="text/javascript" src="./js/rangy-classapplier.js"></script>
-    <script type="text/javascript" src="./js/rangy-highlighter.js"></script>
 
 </head>
 <body>
 
 <div id = 'instructions_page'>
-  <center><b>Thank you for participating in this study. </b> </center>
+  <center><b>Thank you for participating in this study. Please complete this study in Firefox/Chrome.</b> </center>
   <br/>
   <br/>
   <b>HIT Instructions </b>
@@ -24,49 +22,73 @@
   <div id= 'overview'>
     	You will be shown a <i>search query and a web page</i>. 
     	Assume that you were to issue the given query to a search engine (for example Google) 
-    	and were shown the corresponding webpage as search result, answer 9 questions 
-	regarding the page. These questions assess the following aspects:
-    	<ul class='inst'>		
+    	and were shown the corresponding webpage as search result, find the answer of query in 
+	document where it is available. You should mark all portions of the page 
+	that are relevant to the query. Once you have found the answer in webpage, 
+	answer 4 questions regarding the page. These aspects are explained in detail below:
+    	 <ul class='inst w3-card-4'>	
+			<!--	
     			<li> <b>Relevance: </b> The given webpage is relevant if it provides 
     			information requested in the query. For example, if the query is 
     			'president of USA' and the page is about 'Barak Obama', 
     			it is considered relevant, on the other hand if the page is about 
-    			'Cotton candy', it is irrelevant.
-			You shall only be <b>payed if you mark text that contains the answer to </b>  
-			the query. 
+    			'Cotton candy', it is irrelevant. 
+			<ul>
+			<li>
+				It is <i>highly relevant</i> when page is dedicated to the topic, 
+				comprehensive and is worthy of being a <i>top</i> result in a web 
+				search engine. 
 			</li>
-    			<li> <b>Readability: </b> Given the webpage, we would like you to indicate 
-			how easy or difficult was it for you to <b>read the webpage</b>. Was the webpage
-    			text clear and easy to read. Whether the length or language of the webpage
-    			impacted its readability. </li>
-    			<li> <b>Findability: </b> We also ask you to mention how easy was it to <b>find the 
-    			information required</b> to answer the query from the webpage. If you 
-    			spent alot of time trying to find the information, please also provide the 
-    			reason why it required more time.</li>
+			<li>
+				It is <i>relevant</i> when content of this page provides 
+				substantial information on the topic. 
+			</li>
+			<li>
+				It is <i>somewhat relevant</i> if it only contains partial information 
+				which may be minimal.
+			</li>
+			<li>
+				It is <i>non relevant</i> when the content of this page does not 
+				provide useful information on the topic, but is discussing some 
+				other topic. 
+			</li>
+			</ul>
+			</li> -->
+    			<li> <b>Findability: </b> We ask you to mention whether or not you were able 
+			to find the required information in page.</li>
+    			<li> <b>Satisfaction: </b> We ask you to mention how satisfied or 
+			happy you were with the page given the query.</li>
+			<li><b>Highlights:</b> You should mark all the relevant parts of webpage.
+			Highlighting is only necessary when page is relevant to the query.  
+			The <a href='./highlight_example.png' target='_black'>image</a> 
+			shows how to highlight parts of page. 
+			You shall only be <b>payed if you mark text that contains the answer </b>  
+			to the query. 
+			</li>
     	</ul>
 		<br/>
-	There are some buttons on top of page for your convenience. They are explained below:
-	<ul class='inst'>
+	There are some buttons on top of document for your convenience. They are explained below:
+	<ul class='inst w3-card-4'>
     		<li><b> Instructions: </b> If you forget instructions, please click on '<b><i>Instructions</i></b>' button <img src='instructions.png' width = '85' height = '25'/>  to view them. </li>
-		<li><b>Important: </b> For each page <b>please mark paragraphs that contain answer</b> to the query using the '<b><i>Important</i></b>' button. 
-		<img src='important.png' width = '80' height = '23'/>  </li>
-		<li> <b> View: </b> To view the portions you marked important, you can click '<b><i>View</i></b>' button.
+		<li> <b> View: </b> To view the text you highlighted, you can click '<b><i>View</i></b>' button.
 		<img src='view.png' width = '55' height = '25'/> 
+		<li> <b> Remove: </b> To remove the text you highlighted, you can click '<b><i>Remove</i></b>' button. Note that it <i>removes all highlights.</i> 
     	</ul>		 
 		<br/>
-		Please <b> DO NOT CLICK</b> on any link on the page. Please <b>enable javascript</b> on your browser 
-		to complete this HIT. Please do not refresh the 
-		page or press back. Contact the Requester if something is not clear.
+		<b>Enable javascript</b> on your browser to complete this HIT. Do not refresh the 
+		page or press back. Contact the Requester if something is not clear. <br/>
+		<b>NOTE:</b> We track whether or not you read the document. If our system detects that you are cheating, 
+		you shall be disqualified and not payed for the hits. 
     	<br/>
     	<br/>
     	<b>HIT Payment </b>
     	<br/>
-    	This HIT consists of <span style="font-weight:bold;">15 query-webpage pairs</span>. 
+    	This HIT consists of <span style="font-weight:bold;">10 query-webpage pairs</span>. 
     	Please note that you will be payed 
     	<span style="font-weight:bold;">ONLY </span>when you <span style="font-weight:bold;">
     	COMPLETE QUESTIONS FOR ALL</span> query-webpage pairs. You may choose to skip a query 
     	and webpage if you cannot answer any question. If too many query-webpage pairs are skipped, 
-    	you	may not be payed in full.  
+    	you may not be payed in full.  
     
   </div>
   <br/>
@@ -79,8 +101,7 @@
 	can be used in scientific publications (no identifying information will be used).
     Sometimes it is necessary to share the data elicited from you
     with other researchers for scientific purposes (for replication purposes). 
-	That is the only reason for which we will share data. It will shared if 
-	it is for non-commercial use. Identifying information will 
+	It will be shared if it is for non-commercial use. Identifying information will 
 	<span style="font-weight:bold;">never</span> be shared 
 	(your MTurk ID will be replaced with an arbitrary alphanumeric code).
   </div>
@@ -124,230 +145,93 @@
 
 </div>
 
-  <button id = 'instructions'>
-  	<b>	Instructions </b>
-  </button>
-  <div id = 'attributes_and_description'>
-  You are given a search query and a web page. You will then be asked 
-  to answer some questions regarding the page and its content. 
-  Assume that you were to issue the given query to a search engine (for example Google) 
-  and were shown the corresponding webpage as search result, 
-  we ask you 9 questions regarding the following parameters: <b>Relevance,  
-  Readability, Findability and Understandability</b>. The parameters are explained below:
-    	<ul class='inst'>		
-    			<li> <b>Relevance: </b> The given webpage is relevant if it provides 
-    			information requested in the query. For example, if the query is 
-    			'president of USA' and the page is about 'Barak Obama', 
-    			it is considered relevant, on the other hand if the page is about 
-    			'Cotton candy', it is irrelevant.
-			You shall only be <b>payed if you mark text that contains the answer to </b>  
-			the query. 
-			</li>
-    			<li> <b>Readability: </b> Given the webpage, we would like you to indicate 
-			how easy or difficult was it for you to <b>read the webpage</b>. Was the webpage
-    			text clear and easy to read. Whether the length or language of the webpage
-    			impacted its readability. </li>
-    			<li> <b>Findability: </b> We also ask you to mention how easy was it to <b>find the 
-    			information required</b> to answer the query from the webpage. If you 
-    			spent alot of time trying to find the information, please also provide the 
-    			reason why it required more time.</li>
-    	</ul>
-		<br/>
-	There are some buttons on top of page for your convenience. They are explained below:
-	<ul class='inst'>
-    		<li><b> Instructions: </b> If you forget instructions, please click on '<b><i>Instructions</i></b>' button <img src='instructions.png' width = '85' height = '25'/>  to view them. </li>
-		<li><b>Important: </b> For each page <b>please mark paragraphs relevant</b> to the query using the '<b><i>Important</i></b>' button 
-		<img src='important.png' width = '80' height = '23'/>  </li>
-		<li> <b> View: </b> To view the portions you marked important, you can click '<b><i>View</i></b>' button.
-		<img src='view.png' width = '55' height = '25'/> 
-    	</ul>		 
-	Please <b> DO NOT CLICK</b> on any link on the page. <br/>
-  </div>
- 
- <button id='important_button'  >
-	<b> Important </b>
- </button>
-	<div id = 'important_div'>
-	</div>
-
- <button id='view_important_button'>
-	<b> View </b>
- </button>
 
 
 <div id='labels_page'>
 
   <input id='query_document_id' class='text' type='hidden'> </input>
-  <div id= 'query_and_document'>
+  <div id='query_count' > </div>
+  <div id= 'query_and_document' >
+	<div class="w3-container w3-light-grey w3-border">
 	<p> <b> Suppose you submitted the following query to a search engine and the document below was shown as a result. </b></p>
 	<b> Query: </b>   <span id='query'> query </span>  <br/>
-	<b> Description: </b> <span id='query_description'>  description </span> <br/>
-	<br/>
+	<b> Description: </b> <span id='query_description'>  description </span> 
+	<p> <b> If the webpage does not load, please visit the following link. </b></p>
+	<b> Webpage Link: </b> <a id='doc_url' href='' target='document_frame'>  url </a> <br/>
+	</div>
+  <button  class="w3-btn-floating w3-dropdown-hover" id = 'instructions'>
+  	<b>	Instructions </b>
+  </button>
+  <div class="w3-dropdown-content w3-card-4" id = 'attributes_and_description' style="width:550px">
+    	You will be shown a <i>search query and a web page</i>. 
+    	Assume that you were to issue the given query to a search engine (for example Google) 
+    	and were shown the corresponding webpage as search result, find the answer of query in 
+	document where it is available. You should mark all portions of the page 
+	that are relevant to the query. Once you have found the answer in webpage, 
+	answer 4 questions regarding the page. These aspects are explained below: 
+    	 <ul class='inst w3-card-4'>		
+    			<!--<li> <b>Relevance: </b> The given webpage is relevant if it provides 
+    			information requested in the query. For example, if the query is 
+    			'president of USA' and the page is about 'Barak Obama', 
+    			it is considered relevant, on the other hand if the page is about 
+    			'Cotton candy', it is irrelevant. 
+			<ul>
+			<li>
+				It is <i>highly relevant</i> when page is dedicated to the topic, 
+				comprehensive and is worthy of being a <i>top</i> result in a web 
+				search engine. 
+			</li>
+			<li>
+				It is <i>relevant</i>when content of this page provides 
+				substantial information on the topic. 
+			</li>
+			<li>
+				It is <i>somewhat relevant</i> if it only contains partial information 
+				which may be minimal.
+			</li>
+			<li>
+				It is i<i>non relevant</i> when the content of this page does not 
+				provide useful information on the topic, but is discussing some 
+				other topic. 
+			</li>
+			</ul>
+			</li>-->
+    			<li> <b>Findability: </b> We ask you to mention whether or not you were able 
+			to find the required information in page.</li>
+    			<li> <b>Satisfaction: </b> We ask you to mention how satisfied or 
+			happy you were with the page given the query.</li>
+			<li> <b>Highlights:</b> You should mark all the relevant parts of webpage.
+			Highlighting is only necessary when page is relevant to the query.  
+			The <a href='./highlight_example.png' target='_black'>image</a> 
+			shows how to highlight parts of page. 
+			You shall only be <b>payed if you mark text that contains the answer </b>  
+			to the query. 
+			</li>
+    	</ul>
+  </div>
+ 
+	<div id = 'important_div' class="w3-dropdown-content w3-card-4" style="width:550px">
+	</div>
+
+ <button class="w3-btn-floating w3-dropdown-hover" id='view_important_button'>
+	<b> View </b>
+ </button>
+ <button class="w3-btn-floating w3-dropdown-hover" id='remove_important_button'>
+	<b> Remove </b>
+ </button>
 	<iframe align="middle" frameborder="1" height="650" id="document_frame" name="document_frame" scrolling="yes" src="" width="100%"></iframe>
   </div>
-  <form id='questions_form', method='POST'>
- <div id='questions_form_error'> </div>
-  <div id= 'questions'>
-  <table border="0" cellpadding="0" cellspacing="4">
-  	<tbody>
-  	<b>1. Rate your <i><u>knowledge</u></i> on the topic? (this does not affect your pay)</b>
-  		<tr>
-  			<td valign="center"><input name="familier" type="radio" value="none" /><span class="answertext">No Knowledge</span></td>
-  			<td valign="center"><input name="familier" type="radio" value="beginner" /><span class="answertext">Very little knowledge</span></td>
-		</tr>
-		<tr>
-  			<td valign="center"><input name="familier" type="radio" value="intermediate" /><span class="answertext">Some knowledge</span></td>
-  			<td valign="center"><input name="familier" type="radio" value="expert" /><span class="answertext">Expert</span></td>
-  		</tr>
-  	</tbody>
-  </table>
- <div id='familier_input_error'> </div>
-  <br/>
   
-  <table border="0" cellpadding="0" cellspacing="4">
-  	<tbody>
-  	  <b>2. Would you be <i><u>satisfied (happy)</u></i> with this search result? </b>
-  		<tr>
-  			<td valign="center"><input name="happy" type="radio" value="yes" /><span class="answertext">Yes</span></td>
-  			<td valign="center"><input name="happy" type="radio" value="no" /><span class="answertext">No</span></td>
-		</tr>
-		<tr>
-  			<td valign="center"><input name="happy" type="radio" value="somewhat" /><span class="answertext">Somewhat</span></td>
-  			<td valign="center"><input name="happy" type="radio" value="cant-judge" /><span class="answertext">Cant Judge (skip the remaining questions)</span></td>
-  		</tr>
-  	<!--	<tr>
-  			<td valign="center"><span class="answertext">Reason </span></td>
-			<td valign="center"><textarea name="happy"  value="your explanation" > </textarea></td>
-  		</tr> -->
-
-  	</tbody>
-  </table>
- <div id='happy_input_error'> </div>
-  <br/>
+  <form id='questions_form' method='POST' class="w3-container w3-light-grey w3-border">
+	<div id='questions_form_error'> </div>
   
-  <table border="0" cellpadding="0" cellspacing="4">
-  	<tbody>
-  	<b>3. Is this document <i><u>relevant</u></i> to the query?</b>
-  		<tr>
-  			<td valign="center"><input name="relevance" type="radio" value="non-rel" /><span class="answertext">Nonrelevant</span></td>
-  			<td valign="center"><input name="relevance" type="radio" value="some-rel" /><span class="answertext">Somewhat Relevant</span></td>
-  		</tr>
-  		<tr>
-  			<td valign="center"><input name="relevance" type="radio" value="rel" /><span class="answertext">Relevant</span></td>
-  			<td valign="center"><input name="relevance" type="radio" value="high-rel" /><span class="answertext">Highly Relevant</span></td>
-  		</tr>
-  		<tr>
-  			<td valign="center"><input name="relevance" type="radio" value="broken-url" /><span class="answertext">Url is broken (Page not found or some error)</span></td>
-  		</tr>
-  	</tbody>
-  </table>
-  <div id='relevance_input_error'> </div>
-  <br/>
- <!-- <table border="0" cellpadding="0" cellspacing="4">
-  	<tbody>
-  		<b>4. How difficult was it to  <i><u>understand</u></i> the document?</b>
-  		<tr>
-  			<td valign="center"><input name="understand" type="radio" value="some-diff" /><span class="answertext">Somewhat difficult</span></td>
-  			<td valign="center"><input name="understand" type="radio" value="v-easy" /><span class="answertext">Very easy</span></td>
-  		</tr>
-  		<tr>
-  			<td valign="center"><input name="understand" type="radio" value="easy" /><span class="answertext">Easy</span></td>
-  			<td valign="center"><input name="understand" type="radio" value="v-diff" /><span class="answertext">Very Difficult</span></td>
-  		</tr>
-  		<tr>
-  			<td valign="center"><span class="answertext">Reason </span></td>
-			<td><textarea name="understand" value="your explanation" > </textarea></td>
-  		</tr>
-  	</tbody>
-  </table>
- <div id='understand_input_error'> </div>
-  <br/>-->
+	<div id='label_question_div' name='label_question_div'>
+  		<table border="0" cellpadding="0" cellspacing="4"  name ="label_question_table" id="label_question_table">
+  		</table>
+  		<div id='label_question_input_error'> </div>
   
-  <table border="0" cellpadding="0" cellspacing="4">
-  	<tbody>
-  		<b>5. How easy was it to <i><u>read</u></i> the document? </b>
-  		<tr>
-  			<td valign="center"><input name="read" type="radio" value="v-diff" /><span class="answertext">Very Difficult</span></td>
-  			<td valign="center"><input name="read" type="radio" value="some-diff" /><span class="answertext">Somewhat difficult</span></td>
-  		</tr>
-  		<tr>
-  			<td valign="center"><input name="read" type="radio" value="v-easy" /><span class="answertext">Very easy</span></td>
-  			<td valign="center"><input name="read" type="radio" value="easy" /><span class="answertext">Easy</span></td>
-  		</tr>
-  	</tbody>
-  </table>
-  <div id='read_input_error'> </div>
-  <br/>
-  
-  <table border="0" cellpadding="0" cellspacing="4">
-  	<tbody>
-  		<b>6. Did you <i><u>find</u></i> the required information in the document?</b>
-  		<tr>
-  			<td valign="center"><input name="find_info" type="radio" value="no" /><span class="answertext">No, did not find required information </span></td>
-  		</tr>
-  		<tr>
-  			<td valign="center"><input name="find_info" type="radio" value="yes" /><span class="answertext">Yes, found all the information </span></td>
-  		</tr>
-  		<tr>
-  			<td valign="center"><input name="find_info" type="radio" value="partial" /><span class="answertext">Somewhat, found only partial information </span></td>
-  		</tr>
-  	</tbody>
-  </table>
-  <div id='find_info_input_error'> </div>
-  <br/>
-
-  <table border="0" cellpadding="0" cellspacing="4">
-  	<tbody>
-  		<b>7. Is it <i><u>easy to find</u></i> answer of the query in the document?</b>
-  		<tr>
-  			<td valign="center"><input name="find" type="radio" value="v-easy" /><span class="answertext">Very easy</span></td>
-  			<td valign="center"><input name="find" type="radio" value="v-diff" /><span class="answertext">Very Difficult</span></td>
-  		</tr>
-  		<tr>
-  			<td valign="center"><input name="find" type="radio" value="easy" /><span class="answertext">Easy</span></td>
-  			<td valign="center"><input name="find" type="radio" value="some-diff" /><span class="answertext">Somewhat difficult</span></td>
-  		</tr>
-  		<!--<tr>
-  			<td valign="center"><span class="answertext">Reason </span></td>
-			<td><textarea name="find"  value="your explanation" > </textarea></td>
-  		</tr> -->
-  	</tbody>
-  </table>
-  <div id='find_input_error'> </div>
-  <br/>
-  
-<!--  <table border="0" cellpadding="0" cellspacing="4">
-  	<tbody>
-  		<b>8. Did it take you a lot of <i><u>time to find</u></i> useful information in the document?</b>
-  		<tr>
-  			<td valign="center"><input name="find_time" type="radio" value="yes" /><span class="answertext">Yes </span></td>
-  		</tr>
-  		<tr>
-  			<td valign="center"><input name="find_time" type="radio" value="no" /><span class="answertext">No </span></td>
-  		</tr>
-  	</tbody>
-  </table>
-  <div id='find_time_input_error'> </div>
-  <br/>
-  
-  <table border="0" cellpadding="0" cellspacing="4">
-  	<tbody>
-  		<b>9. Was it very <i><u>difficult to understand</u></i> the document?</b>
-  		<tr>
-  			<td valign="center"><input name="understand_very_diff" type="radio" value="no" /><span class="answertext">No</span></td>
-  		</tr>
-  		<tr>
-  			<td valign="center"><input name="understand_very_diff" type="radio" value="yes" /><span class="answertext">Yes</span></td>
-  		</tr>
-  	</tbody>
-  </table>
-  <div id='understand_very_diff_input_error'> </div>
-  <br/> -->
-  
-  
-  </div>
-	<div id='query_count' > </div>
-  <input type= 'submit' value='Next Query'/> 
+	</div>	
+  	<input id="next_question" type= 'submit' value='Next Question' class="question_button"/> 
   </form>
 </div>
 

@@ -103,14 +103,14 @@ module.exports =
 					// format : queryid query-type, query, query-description, doc-id, doc-label, doc_url doc-content
             				if(split.length == 8)
 					{
+						split[7] = ReplaceRelativeLinks(split[7], split[6]);
 						// Fix the qoutes problem.
 						qcount = split[7].match(/\"/g).length;
 						// unhandled qoute, replace them all by
 						// &ldquo; 
-						split[7] = ReplaceRelativeLinks(split[7], split[6]);
-						if (qcount%2 == 1)
-							split[7] = split[7].replace(/"/g,"&ldquo;");
-						key_data_dict[key].push([split[0],split[2],split[3],split[4],split[7]]);
+						//if (qcount%2 == 1)
+						//	split[7] = split[7].replace(/"/g,"&ldquo;");
+						key_data_dict[key].push([split[0],split[2],split[3],split[4],split[7], split[6]]);
 
 					}
 					else
@@ -118,7 +118,7 @@ module.exports =
         			}
 				// Shuffle the entries.
 				key_data_dict[key] = shuffle(key_data_dict[key]);
-        			console.log('Loaded Query-document pairs for '+key+' length '+key_data_dict[key].length);
+        			console.log('Loaded Query-document pairs for '+key+' documents '+key_data_dict[key].length);
 				return true;
 			}
 			catch(error) 
@@ -181,7 +181,7 @@ module.exports =
 			var return_array = key_data_dict[key][current_worker_key_query_index[worker_key]];	
 			// increment the array index
 			current_worker_key_query_index[worker_key]++;
-			console.log('Key '+worker_key + ' '+key_data_dict[key].length +' '+return_array[0]+' '+return_array[1]);
+			console.log('Key '+worker_key + ' '+return_array[0]+' '+return_array[1]+' '+return_array[3]);
 			return {'status':true, 'query_count':current_worker_key_query_index[worker_key], 'next_pair':return_array};
 		}
 	}
