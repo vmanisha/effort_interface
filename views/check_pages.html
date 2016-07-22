@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title> 
+  Query-Document Check 
+</title>
+    <link href="./css/style.css" rel="stylesheet" type="text/css">
+   <script type="text/javascript" src="./js/TextHighlighter.js"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="./js/jquery.validate.js"></script>
+    <script src="./js/load_pages.js"></script>
+
+</head>
+<body>
+ <input id='start' class ='text' type='submit' value = 'Load Documents!' class="question_button"></input>
+ <input id='key' class ='text' type='hidden' value = 'none'></input>
+  <input id='query_document_id' class='text' type='hidden' value = 'none'> </input>
+  <div id='query_count' > </div>
+  <div id= 'query_and_document' >
+	<div class="w3-container w3-light-grey w3-border">
+	<p> <b> Suppose you submitted the following query to a search engine and the document below was shown as a result. </b></p>
+	<b> Query: </b>   <span id='query'> query </span>  <br/>
+	<b> Description: </b> <span id='query_description'>  description </span> 
+	<p> <b> If the webpage does not load, please visit the following link. </b></p>
+	<b> Webpage Link: </b> <a id='doc_url' href='' target='document_frame'>  url </a> <br/>
+  	</div>
+
+	<iframe sandbox='' align="middle" frameborder="1" height="650" id="document_frame" name="document_frame" scrolling="yes" src="" width="100%"></iframe>
+  	<input id="correct_button" type= 'submit' value='Correct' class="question_button"/> 
+  	<input id="incorrect_button" type= 'submit' value='Incorrect' class="question_button"/> 
+  </div>
+</body>
+
+</html>

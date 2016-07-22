@@ -32,7 +32,6 @@ var skipped = 0;
 var hltr;
 var cant_judge = -1;
 var total_cant_judge = 0;
-
 $(function(){
 
   // Check the values of worker_id and key.
@@ -257,11 +256,12 @@ $(function(){
 		submitHandler: function postForm(validator, form, submit_event) {
 			worker_id = $('#worker_id_input').val().trim();
 			key = $('#key_input').val().trim();
+			var user_agent = navigator.userAgent;
 			var proficiency = $("#worker_id_and_key_form input[name='proficiency']:checked").val();
 			// Clear any incorrect key error.
 			$('#worker_id_and_key_form_error').html('');
 			$.ajax({url:'api/startHIT',
-    		    		data: JSON.stringify({'worker_id':worker_id , 'key':key, 'responses':[{'proficiency':proficiency}] }),
+    		    		data: JSON.stringify({'worker_id':worker_id , 'key':key, 'responses':[{'proficiency':proficiency, 'user_agent':user_agent}] }),
     		    		contentType: "application/json",
     		    		type:'post',
     		    		success : function(output){
@@ -304,8 +304,8 @@ $(function(){
 	hltr = new TextHighlighter(document.querySelector('iframe').contentDocument.body);
 	iframe.find('a').click(function(event) {
             event.preventDefault();
-        }); 
-	/*iframe.mousemove(function(event) {
+        });/* 
+	iframe.mousemove(function(event) {
 		total_hovers+=1.0;
 		var edict = {};
 		edict['hover'] = event.type+' '+event.pageX + ' '+ event.pageY + ' '+ event.target.text;
@@ -315,11 +315,14 @@ $(function(){
 		total_scrolls+=1.0;
 		var iCurScrollPos = iframe.scrollTop();
 		var scrollType='';
+		var iframe_client_height = document.getElementById('document_frame').clientHeight;
+		//var scrollPercent = 100 * $(window).scrollTop() / ($(document).height() - $(window).height());
+		var scrollPercent = 100 * iframe.scrollTop() / (iframe.height() - iframe_client_height );
 		if (iCurScrollPos > iScrollPos) {
 		   // Fire scroll down event.
-		    scrollType='down';	
+		    scrollType={'down', scrollPercent.toFixed(2)};	
 		} else {
-		    scrollType='up';
+		    scrollType={'up',scrollPercent.toFixed(2)};
 		}
 		iScrollPos = iCurScrollPos;
 		var edict = {};

@@ -9,7 +9,7 @@ var fs = require('fs');
 var MicroDB = require('nodejs-microdb');
 var url = require('url');
 var cheerio = require('cheerio');
-
+var sanitizer = require('sanitize-html');
 worker_batchkey_dict = {};
 key_data_dict = {};
 current_worker_key_query_index= {};
@@ -104,13 +104,21 @@ module.exports =
             				if(split.length == 8)
 					{
 						split[7] = ReplaceRelativeLinks(split[7], split[6]);
+						var sanitized_html = sanitizer(split[7],{allowedTags:false, 
+								allowedAttributes:false, 
+								exclusiveFilter: function(frame) {
+								        return frame.tag === 'noscript' && !frame.text.trim();
+    								}
+							});
+						
 						// Fix the qoutes problem.
-						qcount = split[7].match(/\"/g).length;
+						// qcount = split[7].match(/\"/g).length;
 						// unhandled qoute, replace them all by
 						// &ldquo; 
 						//if (qcount%2 == 1)
 						//	split[7] = split[7].replace(/"/g,"&ldquo;");
-						key_data_dict[key].push([split[0],split[2],split[3],split[4],split[7], split[6]]);
+						key_data_dict[key].push([split[0],split[2],split[3],
+									split[4],sanitized_html, split[6]]);
 
 					}
 					else

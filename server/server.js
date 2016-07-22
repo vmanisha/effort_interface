@@ -117,5 +117,40 @@ app.post('/api/submitQueryPairResponses', function(req, res){
 	res.json(true);
 });
 
+pages = 0;
+var MicroDB = require('nodejs-microdb');
+not_loading_pages = new MicroDB({'file':'failed_pages.db', 'defaultClean':true});
+
+// For page labelling.
+app.post('/api/submitIncorrectDocument', function (req, res) {
+	var query_document_id = req.body.query_document_id;
+	var key = req.body.key;
+	pages++;
+	not_loading_pages.add({'query_document_id':query_document_id, 'key':pages});
+	// The document does not load properly. 
+	// Set the value in a file. 
+	console.log(query_document_id+' does not load!');
+	not_loading_pages.flush();
+	res.json(true);	
+	
+});
+
+app.post('/api/startCheck', function(req, res) {
+	
+	var key = req.body.key;
+	var worker_id = req.body.worker_id;
+	rstatus = datastore.loadHITBatchByKey(key);
+	datastore.initializeWorkerBatchKeyProperties(worker_id,key);
+	if (rstatus == true)
+		res.json(true);	
+	else
+	{	
+    		res.statusCode = 400;
+		res.send('Error 400: Got invalid Batch Id, please refer to '+
+			'HIT description on MTurk for correct Id !');	  
+	}
+
+});
+
 app.listen(process.env.PORT || 4730);
 
