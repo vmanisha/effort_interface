@@ -1,7 +1,7 @@
 $(function(){
 
   // Make sure all query/document pairs are in file xab in Data folder. 
-  var key = 'xaa';
+  var key = 'xab';
   var query_document_id = $('#query_document_id').val();
   var contentFrame;
   var total_scrolls = 0.0;
@@ -52,9 +52,6 @@ $(function(){
   $('#document_frame').load(function () {
 	var iframe = $('#document_frame').contents();
 
-	// Submit the iframe property and page length on client window
-	SubmitPageEvent({'doc_render':iframe.height()+' '+document.getElementById('document_frame').clientHeight});
-
 	iframe.find('a').click(function(event) {
             event.preventDefault();
         }); 
@@ -67,7 +64,7 @@ $(function(){
 		if ((['P', 'TR', 'TD', 'A','SPAN'].indexOf(element) == -1) || content.length > 200) 
 			content = '';
 		 
-		edict = [Math.round(Date.now()/1000),event.pageX, event.pageY,content,element};
+		edict = [Math.round(Date.now()/1000),event.pageX, event.pageY,content,element];
 		// update the page with information. 
 		$('#mouse_movement').val($('#mouse_movement').val()+'\n'+JSON.stringify(edict));
 	});
@@ -110,6 +107,8 @@ function GetNextPair(key) {
     	    if('next_pair' in output)
     	    {
     	        $('#query').html(output['next_pair'][1]);
+		$('#mouse_movement').val('');
+		$('#scroll_movement').val('');
     	        $('#query_description').html(output['next_pair'][2]);
     	        $('#doc_url').html(output['next_pair'][5]);
     	        $('#query_count').html('Query-Webpage pair #'+output['query_count']);

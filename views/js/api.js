@@ -324,7 +324,7 @@ $(function(){
 		if ((['P', 'TR', 'TD', 'A','SPAN'].indexOf(element) == -1) || content.length > 200) 
 			content = '';
 		 
-		edict = [Math.round(Date.now()/1000),event.pageX, event.pageY,content,element};
+		edict = [Math.round(Date.now()/1000),event.pageX, event.pageY,content,element];
 		// update the page with information. 
 		$('#mouse_movement').val($('#mouse_movement').val()+'\n'+JSON.stringify(edict));
 	});
@@ -400,6 +400,8 @@ function GetNextPair(worker_id, key) {
     	    {
     	        $('#query').html(output['next_pair'][1]);
     	        $('#query_description').html(output['next_pair'][2]);
+		$('#mouse_movement').val('');
+		$('#scroll_movement').val('');
     	        $('#doc_url').html(output['next_pair'][5]);
     	        $('#query_count').html('Query-Webpage pair #'+output['query_count']);
     	        var query_doc_id = output['next_pair'][0]+'\t'+output['next_pair'][3];
