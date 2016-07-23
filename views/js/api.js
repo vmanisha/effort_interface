@@ -199,6 +199,12 @@ $(function(){
 			if ((curr_question >= questions_dict.length) || (cant_judge == 1) ) {
 				curr_question = -1;
 				
+				// Submit the mouse trails on page. 
+				SubmitPageEvent({'mouse_trail':$('#mouse_movement').val()});
+			
+				// Submit the scroll movement. 
+				SubmitPageEvent({'scroll_trail':$('#scroll_movement').val()});
+				
 				// Fetch the important text 
 				radio_dict['important_text'] = highs;
 				
@@ -302,15 +308,26 @@ $(function(){
   $('#document_frame').load(function () {
 	var iframe = $('#document_frame').contents();
 	hltr = new TextHighlighter(document.querySelector('iframe').contentDocument.body);
+
+	// Submit the iframe property and page length on client window
+	SubmitPageEvent({'doc_render':iframe.height()+' '+document.getElementById('document_frame').clientHeight});
+
 	iframe.find('a').click(function(event) {
             event.preventDefault();
-        });/* 
+        }); 
+
 	iframe.mousemove(function(event) {
 		total_hovers+=1.0;
 		var edict = {};
-		edict['hover'] = event.type+' '+event.pageX + ' '+ event.pageY + ' '+ event.target.text;
-		SubmitPageEvent(edict);
-	});*/
+		var element = event.originalEvent.target.tagName;
+		var content = event.originalEvent.target.innerText;
+		if ((['P', 'TR', 'TD', 'A','SPAN'].indexOf(element) == -1) || content.length > 200) 
+			content = '';
+		 
+		edict = [Math.round(Date.now()/1000),event.pageX, event.pageY,content,element};
+		// update the page with information. 
+		$('#mouse_movement').val($('#mouse_movement').val()+'\n'+JSON.stringify(edict));
+	});
 	iframe.scroll(function() {
 		total_scrolls+=1.0;
 		var iCurScrollPos = iframe.scrollTop();
@@ -318,16 +335,22 @@ $(function(){
 		var iframe_client_height = document.getElementById('document_frame').clientHeight;
 		//var scrollPercent = 100 * $(window).scrollTop() / ($(document).height() - $(window).height());
 		var scrollPercent = 100 * iframe.scrollTop() / (iframe.height() - iframe_client_height );
+		var edict = {};
 		if (iCurScrollPos > iScrollPos) {
 		   // Fire scroll down event.
-		    scrollType={'down', scrollPercent.toFixed(2)};	
-		} else {
-		    scrollType={'up',scrollPercent.toFixed(2)};
+		    edict['dirn']='down';
+		    edict['percent'] = scrollPercent.toFixed(2);	
+		    edict['time'] = Math.round(Date.now()/1000);
+		} else { 
+		    edict['dirn']='up';
+		    edict['percent'] = scrollPercent.toFixed(2);
+		    edict['time'] = Math.round(Date.now()/1000);
 		}
 		iScrollPos = iCurScrollPos;
-		var edict = {};
-        	edict['scroll' ] = scrollType;
-		SubmitPageEvent(edict);
+		// Update the page scroll trail
+		$('#scroll_movement').val($('#scroll_movement').val()+'\n'+JSON.stringify(edict));
+		// SubmitPageEvent(edict);
+
   	});
    }); 
 });
