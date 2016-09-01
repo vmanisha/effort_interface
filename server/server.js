@@ -7,11 +7,10 @@ var bodyParser = require('body-parser');
 app.engine('html', engines.mustache);
 app.set('view engine', 'html');
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '5mb' }));
 
 app.set('views', __dirname + '/../views');
 
-app.use(bodyParser.json());
 app.use("/", express.static(__dirname + '/../views'));
 app.use("/js", express.static(__dirname + '/../views/js'));
 app.use("/css", express.static(__dirname + '/../views/css'));
@@ -93,7 +92,7 @@ app.post('/api/submitEventForQueryPair', function(req, res){
 		for(var ekey in event_array[i])	
 		{	
 			//console.log('Event '+ekey +' '+event_array[i][ekey]);
-			time = new Date(time.getTime()+100);
+			time = new Date(time.getTime()+10);
 			datastore.addEventToDatabase(worker_id, key,query_document_id+'\t'+ ekey, event_array[i][ekey], time.getTime());
 		}
 	}

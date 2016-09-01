@@ -32,6 +32,9 @@ var skipped = 0;
 var hltr;
 var cant_judge = -1;
 var total_cant_judge = 0;
+// Record users search word events. 
+var doc_ctrl = false;
+
 $(function(){
 
   // Check the values of worker_id and key.
@@ -46,6 +49,15 @@ $(function(){
   
   // Collect the radio responses and build the dictionary.
   var radio_dict = {};
+
+  $(document).keydown(function(event) {
+  	if(event.which == 17)  // User pressed f. 
+  		doc_ctrl = true;
+  	if(event.which == 70 && doc_ctrl == true){
+  		doc_ctrl = false;
+		SubmitPageEvent({'search_ctrlf':true});
+  	}
+  });
 
   // If no worker_id or key is present
   // load the only the instructions and consent.	
@@ -117,6 +129,7 @@ $(function(){
     	    		$('#questions_form_error').html("");
 			var checked_value = $('#questions_form input[type="radio"]:checked').val();
 			var question_type = $('#questions_form input[type="radio"]:checked').attr('id');
+			radio_dict[question_type] = checked_value;
 
 			if (checked_value == 'cant-judge' && question_type == 'happy') {
 				if (total_scrolls == 0)
@@ -136,6 +149,7 @@ $(function(){
 					' allowed to annotate more documents. You shall not be payed for the remaining hits.');
 				}
 				total_cant_judge+=1;
+
 			}
 			else if (total_scrolls == 0 && cheat < 3 && highs.length == 0) {
 				cheat+=1;	
@@ -168,20 +182,20 @@ $(function(){
 					// If answer is relevant and no portion is highlighted. 
 					// alert(answer+' '+type+ ' '+highs.length);
 					//if ((highs.length) == 0 && (type  == 'relevance') && (answer.indexOf('non-rel') == -1 && answer.indexOf('broken') == -1)) {
-				if ((highs.length == 0) && (type  == 'find-info') && (answer.indexOf('no') == -1)) {
-						$('#questions_form_error').css("color","red");
-						$('#questions_form_error').css('text-decoration', 'bold');
-    	    					$('#questions_form_error').html("Please highlight the text useful to answer the query before answering this question.");
+					if ((highs.length == 0) && (type  == 'find-info') && (answer.indexOf('no') == -1)) {
+							$('#questions_form_error').css("color","red");
+							$('#questions_form_error').css('text-decoration', 'bold');
+    	    						$('#questions_form_error').html("Please highlight the text useful to answer the query before answering this question.");
 					}
 					else {
-						radio_dict[$(this).attr('id')] = $(this).val();
+						radio_dict[type] = answer;
 						//if ((questions_dict[curr_question]["type"] == "happy") && 
 						//		($(this).val() == "cant-judge")) {
 						//	cant_judge=1;
 						//	total_cant_judge+=1;
 						//}
 						if ((questions_dict[curr_question]["type"] == "find-info") && 
-									($(this).val() == "no")) {
+									(answer == "no")) {
 							curr_question+=2;
 						}
 						else {	
@@ -205,9 +219,11 @@ $(function(){
 				// Submit the scroll movement. 
 				SubmitPageEvent({'scroll_trail':$('#scroll_movement').val()});
 				
-				// Fetch the important text 
-				radio_dict['important_text'] = highs;
-				
+				// Important highlights.
+				for (i = 0; i < highs.length;) { 
+					SubmitPageEvent({'important_text':highs.slice(i,Math.min(highs.length, i+10))});
+					i+=10;
+				}
 				// Register the responses.
 				$.ajax({url:'api/submitQueryPairResponses',
 					data: JSON.stringify({'worker_id':worker_id ,
@@ -263,34 +279,43 @@ $(function(){
 			worker_id = $('#worker_id_input').val().trim();
 			key = $('#key_input').val().trim();
 			var user_agent = navigator.userAgent;
-			var proficiency = $("#worker_id_and_key_form input[name='proficiency']:checked").val();
-			// Clear any incorrect key error.
-			$('#worker_id_and_key_form_error').html('');
-			$.ajax({url:'api/startHIT',
-    		    		data: JSON.stringify({'worker_id':worker_id , 'key':key, 'responses':[{'proficiency':proficiency, 'user_agent':user_agent}] }),
-    		    		contentType: "application/json",
-    		    		type:'post',
-    		    		success : function(output){
-    		    		    $('#worker_id').val(worker_id);
-    		    		    $('#key').val(key);
-		    		    $('#instructions_page').hide();
-		    		    $('#attributes_and_description').hide();
-		    		    $('#important_div').hide();
-		    		    $('#instructions').show();
-		    		    $('#view_important_button').show();
-		    		    $('#labels_page').show();
-    		    		    //get new query pair
-		    		    GetNextPair(worker_id, key );				
-    		    		},
-    		    		error : function(output)
-    		    		{
-	    		    		$('#worker_id_and_key_form_error').css("color","red");
-	    		    		$('#worker_id_and_key_form_error').css('text-decoration', 'bold');
-    		   	    		$('#worker_id_and_key_form_error').html(output.responseText);
-    		    		}
+			if (user_agent.indexOf('Chrome') > 0) {
+	    			$('#worker_id_and_key_form_error').css("color","red");
+	    			$('#worker_id_and_key_form_error').css('text-decoration', 'bold');
+    		   		$('#worker_id_and_key_form_error').html("Please attempt the hit in Firefox browser");
+			}
+			else {
 
-			});
-			return false;
+				
+				var proficiency = $("#worker_id_and_key_form input[name='proficiency']:checked").val();
+				// Clear any incorrect key error.
+				$('#worker_id_and_key_form_error').html('');
+				$.ajax({url:'api/startHIT',
+    		    			data: JSON.stringify({'worker_id':worker_id , 'key':key, 'responses':[{'proficiency':proficiency, 'user_agent':user_agent}] }),
+    		    			contentType: "application/json",
+    		    			type:'post',
+    		    			success : function(output){
+    		    			    $('#worker_id').val(worker_id);
+    		    			    $('#key').val(key);
+		    			    $('#instructions_page').hide();
+		    			    $('#attributes_and_description').hide();
+		    			    $('#important_div').hide();
+		    			    $('#instructions').show();
+		    			    $('#view_important_button').show();
+		    			    $('#labels_page').show();
+    		    			    //get new query pair
+		    			    GetNextPair(worker_id, key );				
+    		    			},
+    		    			error : function(output)
+    		    			{
+	    			    		$('#worker_id_and_key_form_error').css("color","red");
+	    			    		$('#worker_id_and_key_form_error').css('text-decoration', 'bold');
+    		   		    		$('#worker_id_and_key_form_error').html(output.responseText);
+    		    			}
+
+				});
+				return false;
+			}
 		}	
   });  
 
@@ -308,7 +333,7 @@ $(function(){
   $('#document_frame').load(function () {
 	var iframe = $('#document_frame').contents();
 	hltr = new TextHighlighter(document.querySelector('iframe').contentDocument.body);
-
+	var ctrl = false;
 	// Submit the iframe property and page length on client window
 	SubmitPageEvent({'doc_render':iframe.height()+' '+document.getElementById('document_frame').clientHeight});
 
@@ -321,13 +346,25 @@ $(function(){
 		var edict = {};
 		var element = event.originalEvent.target.tagName;
 		var content = event.originalEvent.target.innerText;
-		if ((['P', 'TR', 'TD', 'A','SPAN'].indexOf(element) == -1) || content.length > 200) 
+		if (['P', 'TR', 'TD', 'A','SPAN'].indexOf(element) == -1)  
 			content = '';
-		 
+		else if (content.length > 20)
+			content = content.substring(0,20);
+  
 		edict = [Math.round(Date.now()/1000),event.pageX, event.pageY,content,element];
 		// update the page with information. 
 		$('#mouse_movement').val($('#mouse_movement').val()+'\n'+JSON.stringify(edict));
 	});
+
+	iframe.keydown(function(event) {
+		if(event.which == 17)  // User pressed ctrl. 
+     			ctrl = true;
+    		if(event.which == 70 && ctrl == true) {
+    			ctrl = false;
+			SubmitPageEvent({'search_ctrlf':true});
+		}
+	});
+
 	iframe.scroll(function() {
 		total_scrolls+=1.0;
 		var iCurScrollPos = iframe.scrollTop();
@@ -409,7 +446,7 @@ function GetNextPair(worker_id, key) {
     	  	iScrollPos = 0;
     	        total_scrolls = 0;
 		total_hovers = 0;
-		cant_judge= 0;
+		cant_judge= -1;
 		radio_dict = {};
 		hltr.removeHighlights();
 		$('#document_frame').attr("srcdoc", output['next_pair'][4]);

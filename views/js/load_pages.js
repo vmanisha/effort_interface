@@ -1,7 +1,7 @@
 $(function(){
 
   // Make sure all query/document pairs are in file xab in Data folder. 
-  var key = 'xab';
+  var key = 'xac';
   var query_document_id = $('#query_document_id').val();
   var contentFrame;
   var total_scrolls = 0.0;
