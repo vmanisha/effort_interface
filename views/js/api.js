@@ -132,10 +132,8 @@ $(function(){
 			radio_dict[question_type] = checked_value;
 
 			if (checked_value == 'cant-judge' && question_type == 'happy') {
-				if (total_scrolls == 0)
-					cheat+=1;
 				cant_judge=1;
-				if (cant_judge == 5) {
+				if (total_cant_judge == 5) {
     	    				$('#instructions_page').hide();
     	    				$('#labels_page').hide();
     	    				$('#instructions').hide();
@@ -149,13 +147,6 @@ $(function(){
 					' allowed to annotate more documents. You shall not be payed for the remaining hits.');
 				}
 				total_cant_judge+=1;
-
-			}
-			else if (total_scrolls == 0 && cheat < 3 && highs.length == 0) {
-				cheat+=1;	
-				curr_question+=1;
-				if (curr_question < questions_dict.length)
-					UpdateQuestionText(questions_dict,curr_question);
 			}
 			else if (cheat == 3)
 			{
@@ -174,41 +165,26 @@ $(function(){
 				// Notify the server that user responses have to be ignored. 
 				SubmitPageEvent({'ignore_user':'true'});
 			}
-			else {
-				$('#questions_form input[type="radio"]:checked').each(function() {
-					var answer = $(this).val();
-					var type = $(this).attr('id');
-					//alert(type+' '+highs.length+' '+answer.indexOf('No')+' '+answer);
-					// If answer is relevant and no portion is highlighted. 
-					// alert(answer+' '+type+ ' '+highs.length);
-					//if ((highs.length) == 0 && (type  == 'relevance') && (answer.indexOf('non-rel') == -1 && answer.indexOf('broken') == -1)) {
-					if ((highs.length == 0) && (type  == 'find-info') && (answer.indexOf('no') == -1)) {
-							$('#questions_form_error').css("color","red");
-							$('#questions_form_error').css('text-decoration', 'bold');
-    	    						$('#questions_form_error').html("Please highlight the text useful to answer the query before answering this question.");
-					}
-					else {
-						radio_dict[type] = answer;
-						//if ((questions_dict[curr_question]["type"] == "happy") && 
-						//		($(this).val() == "cant-judge")) {
-						//	cant_judge=1;
-						//	total_cant_judge+=1;
-						//}
-						if ((questions_dict[curr_question]["type"] == "find-info") && 
-									(answer == "no")) {
-							curr_question+=2;
-						}
-						else {	
-							// find the next question to select.
-							curr_question+=1;
-							if (curr_question < questions_dict.length)
-								UpdateQuestionText(questions_dict,curr_question);
-						}
-						if (curr_question  == (questions_dict.length - 1 ))
-							$("#next_question").val("Next Page");	
-					}
-				});
+			// If answer is relevant and no portion is highlighted. 
+			else if (question_type == 'find-info') {
+			       	if ((highs.length == 0) && (checked_value.indexOf('no') == -1)) {
+			       		$('#questions_form_error').css("color","red");
+			       		$('#questions_form_error').css('text-decoration', 'bold');
+    	    		       		$('#questions_form_error').html("Please highlight the text useful to answer the query before answering this question.");
+			       		cheat++;
+			       	}		
+			       	else if (checked_value == "no") 
+			       		curr_question+=1;
+			
 			}
+			// find the next question to select.
+			curr_question+=1;
+			if (curr_question < questions_dict.length)
+				UpdateQuestionText(questions_dict,curr_question);
+			
+			if (curr_question  == (questions_dict.length - 1 ))
+					$("#next_question").val("Next Page");	
+			
 			// If all questions have been answered
 			if ((curr_question >= questions_dict.length) || (cant_judge == 1) ) {
 				curr_question = -1;
@@ -389,6 +365,8 @@ $(function(){
 		// SubmitPageEvent(edict);
 
   	});
+
+	setTimeout(function(){window.frames[0].stop();},20000);
    }); 
 });
 
